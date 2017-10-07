@@ -62,47 +62,21 @@ def deserialize_map(serialized_map):
 
 
 def nearestResource(player, map):
-    valid = True
-    range = 3
-    col = 20
-    ro = 20
-    while(valid):
 
-        firstColCase = 9-((range - 1)/2)
-        lastColCase = 9+((range - 1)/2)
+    ressources =[]
+    for i in range(0, 20):
+        for j in range(0, 20):
+            if map[i][j].Content == TileContent.Resource:
+                ressources.append(Point(map[i][j].X, map[i][j].Y))
 
-        firstRowCase = 9-((range - 1) / 2)
-        lastRowCase = 9+((range - 1) / 2)
-
-        if firstColCase < 0 :
-            firstCase = 0
-
-        if lastColCase >= col:
-           lastColCase = col-1
-
-
-        if firstRowCase < 0 :
-           firstRowCase = 0
-        if lastRowCase >= ro:
-           lastRowCase = ro-1
-
-        print(type(lastColCase))
-        for i in range(firstColCase, lastColCase):
-            for j in range(firstRowCase, lastRowCase):
-                print(i)
-                print(j)
-                print(map[i][j].Content)
-                if map[i][j].Content == Resource:
-                    return map.Position
-        #print("lol3")
-        #print(firstColCase + lastColCase + firstRowCase + lastRowCase)
-
-        range += 2
-
-        if ((firstRowCase == 0) and (firstColCase == 0) and (lastColCase == len(player.Position.X)-1) and (lastRowCase == (len(player.Position.Y)-1))):
-            valid = False
-
-    return player.Position
+    shortest_distance = 10000000
+    finalRessource = Point(-1,-1)
+    for i in ressources:
+        distanceCalculated = distance(i, player.Position)
+        if distanceCalculated < shortest_distance :
+            shortest_distance = distanceCalculated
+            finalRessource = i
+    return finalRessource
 
 
 def bot():
@@ -131,7 +105,7 @@ def bot():
     deserialized_map = deserialize_map(serialized_map)
 
     resource = nearestResource(player, deserialized_map)
-
+    print(str(resource))
     otherPlayers = []
 
     for players in map_json["OtherPlayers"]:
@@ -151,7 +125,7 @@ def bot():
     #     return create_attack_action(target)
     # else:
     #     print("not fighting")
-    dest = get_next_move(player.Position, Point(0, 0), deserialized_map)
+    dest = get_next_move(player.Position, resource, deserialized_map)
     print("dest: " + str(dest))
     return create_move_action(dest)
 
