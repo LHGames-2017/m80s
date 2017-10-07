@@ -5,27 +5,39 @@ import numpy
 
 app = Flask(__name__)
 
+
 def create_action(action_type, target):
     actionContent = ActionContent(action_type, target.__dict__)
     return json.dumps(actionContent.__dict__)
 
+
 def create_move_action(target):
     return create_action("MoveAction", target)
+
 
 def create_attack_action(target):
     return create_action("AttackAction", target)
 
+
 def create_collect_action(target):
     return create_action("CollectAction", target)
+
 
 def create_steal_action(target):
     return create_action("StealAction", target)
 
+
 def create_heal_action():
     return create_action("HealAction", "")
 
+
 def create_purchase_action(item):
     return create_action("PurchaseAction", item)
+
+
+def create_upgrade_action(item):
+    return create_action("UpgradeAction", item)
+
 
 def deserialize_map(serialized_map):
     """
@@ -47,6 +59,7 @@ def deserialize_map(serialized_map):
             deserialized_map[i][j] = Tile(content, x, y)
 
     return deserialized_map
+
 
 def bot():
     """
@@ -86,6 +99,7 @@ def bot():
     # return decision
     return create_move_action(Point(0,1))
 
+
 @app.route("/", methods=["POST"])
 def reponse():
     """
@@ -93,5 +107,6 @@ def reponse():
     """
     return bot()
 
+
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=3000)
+    app.run(host="0.0.0.0", port=8080)
