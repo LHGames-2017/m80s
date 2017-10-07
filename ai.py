@@ -132,8 +132,44 @@ def bot():
             otherPlayers.append({player_name: player_info })
 
     # return decision
+    fight_flight(player, player_info)
     return create_move_action(Point(0,1))
 
+def fight_flight(player, other_player):
+    should_fight = False
+    if player.CarriedRessources == 0:
+        should_fight = True
+    elif player.Health < player.MaxHealth/3:
+        should_fight = False
+    if should_fight:
+        target = get_next_move(player.Position, other_player.Position)
+        create_move_action(target)
+
+    return should_fight
+
+
+def get_next_move(position, target):
+    delta_x = position.X - target.X
+    delta_y = position.Y - target.Y
+    if delta_x > 0:
+        x = position.X + 1
+    elif delta_x < 0:
+        x = position.X - 1
+    else:
+        x = 0
+    if delta_y > 0:
+        y = position.Y + 1
+    elif delta_y < 0:
+        y = position.Y - 1
+    else:
+        y = 0
+    return Point(x, y)
+
+
+def distance(p1, p2):
+    delta_x = p1.X - p2.X
+    delta_y = p1.Y - p2.Y
+    return delta_x + delta_y
 
 @app.route("/", methods=["POST"])
 def reponse():
