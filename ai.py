@@ -34,6 +34,7 @@ def create_heal_action():
 def create_purchase_action(item):
     return create_action("PurchaseAction", item)
 
+
 def create_upgrade_action(item):
     return create_action("UpgradeAction", item)
 
@@ -96,6 +97,7 @@ def nearestResource(player, map):
 
     return player.Position
 
+
 def bot():
     """
     Main de votre bot.
@@ -111,8 +113,8 @@ def bot():
     x = pos["X"]
     y = pos["Y"]
     house = p["HouseLocation"]
-    player = Player(p["Health"], p["MaxHealth"], Point(x,y),
-                    Point(house["X"], house["Y"]),
+    player = Player(p["Health"], p["MaxHealth"], Point(x, y),
+                    Point(house["X"], house["Y"]), p["Score"],
                     p["CarriedResources"], p["CarryingCapacity"])
 
     # Map
@@ -121,48 +123,74 @@ def bot():
 
     otherPlayers = []
 
-    for player_dict in map_json["OtherPlayers"]:
-        for player_name in player_dict.keys():
-            player_info = player_dict[player_name]
-            p_pos = player_info["Position"]
-            player_info = PlayerInfo(player_info["Health"],
-                                     player_info["MaxHealth"],
-                                     Point(p_pos["X"], p_pos["Y"]))
+    for players in map_json["OtherPlayers"]:
+        player_info = players["Value"]
+        p_pos = player_info["Position"]
+        player_info = PlayerInfo(player_info["Health"],
+            player_info["MaxHealth"],
+            Point(p_pos["X"], p_pos["Y"]))
 
-            otherPlayers.append({player_name: player_info })
+        otherPlayers.append(player_info)
 
     # return decision
-    fight_flight(player, player_info)
-    return create_move_action(Point(0,1))
+    print("current position: "+ str(player.Position))
+    # should_fight, target = fight_flight(player, Point(player.Position.X + 1, player.Position.Y))
+    # if should_fight:
+    #     print("fighting: ")
+    #     return create_attack_action(target)
+    # else:
+    #     print("not fighting")
+    dest = get_next_move(player.Position, Point(0, 0), deserialized_map)
+    print("dest: " + str(dest))
+    return create_move_action(dest)
 
-def fight_flight(player, other_player):
+#return create_move_action(Point(x,y+1))
+
+def fight_flight(player, other_player_position):
     should_fight = False
+    print(other_player_position)
     if player.CarriedRessources == 0:
+        print("carying nothing")
         should_fight = True
     elif player.Health < player.MaxHealth/3:
+        print("low health")
         should_fight = False
+    else:
+        print("fight")
+        should_fight = True
     if should_fight:
-        target = get_next_move(player.Position, other_player.Position)
-        create_move_action(target)
+        target = Point(0, 0)
+    else:
+        target = get_next_move(player.Position, other_player_position) #to implement for realz
+    return should_fight, target
 
-    return should_fight
 
-
-def get_next_move(position, target):
+def get_next_move(position, target, map):
     delta_x = position.X - target.X
     delta_y = position.Y - target.Y
+    print("deltaX: " + str(delta_x) + " deltaY: " + str(delta_y))
     if delta_x > 0:
-        x = position.X + 1
-    elif delta_x < 0:
         x = position.X - 1
+    elif delta_x < 0:
+        x = position.X + 1
     else:
         x = 0
-    if delta_y > 0:
-        y = position.Y + 1
-    elif delta_y < 0:
-        y = position.Y - 1
+    # if x == 0:
+    print(map[8][9].Content)
+    if x == 0 or map[8][9].Content == TileContent.Empty:
+        x = position.X
+        if delta_y > 0:
+            y = position.Y - 1
+        elif delta_y < 0:
+            y = position.Y + 1
+        else:
+            y = 0
+    elif map[8][9].Content != TileContent.Lava or map[8][9].Content != TileContent.Player:
+        x = position.X - 1
+        y = position.Y
     else:
-        y = 0
+        x = position.X
+        y = position.Y - 1
     return Point(x, y)
 
 
