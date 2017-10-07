@@ -64,31 +64,38 @@ def deserialize_map(serialized_map):
 def nearestResource(player, map):
     valid = True
     range = 3
+    col = 20
+    ro = 20
     while(valid):
-        firstColCase = player.Position.X-((range - 1)/2)
-        lastColCase = player.Position.X-((range - 1)/2)
 
-        firstRowCase = player.Position.Y-((range - 1) / 2)
-        lastRowCase = player.Position.Y-((range - 1) / 2)
+        firstColCase = 9-((range - 1)/2)
+        lastColCase = 9+((range - 1)/2)
 
+        firstRowCase = 9-((range - 1) / 2)
+        lastRowCase = 9+((range - 1) / 2)
 
         if firstColCase < 0 :
             firstCase = 0
 
-        if lastColCase >= len(player.Position.X):
-            lastColCase = len(player.Position.X)-1
+        if lastColCase >= col:
+           lastColCase = col-1
 
 
         if firstRowCase < 0 :
-            firstRowCase = 0
-        if lastRowCase >= len(player.Position.Y):
-            lastRowCase = len(player.Position.Y)-1
+           firstRowCase = 0
+        if lastRowCase >= ro:
+           lastRowCase = ro-1
 
-
+        print(type(lastColCase))
         for i in range(firstColCase, lastColCase):
             for j in range(firstRowCase, lastRowCase):
-                if map.Position.Tile.Content[i][j] == TileContent.Resource:
+                print(i)
+                print(j)
+                print(map[i][j].Content)
+                if map[i][j].Content == Resource:
                     return map.Position
+        #print("lol3")
+        #print(firstColCase + lastColCase + firstRowCase + lastRowCase)
 
         range += 2
 
@@ -117,9 +124,13 @@ def bot():
                     Point(house["X"], house["Y"]), p["Score"],
                     p["CarriedResources"], p["CarryingCapacity"])
 
+
+
     # Map
     serialized_map = map_json["CustomSerializedMap"]
     deserialized_map = deserialize_map(serialized_map)
+
+    resource = nearestResource(player, deserialized_map)
 
     otherPlayers = []
 
