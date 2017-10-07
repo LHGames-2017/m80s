@@ -10,11 +10,11 @@ class UpgradeType():
 
 
 class TileType():
-    Tile, Wall, House, Lava, Resource, Shop = range(6)
+    T, W, H, L, R, S = range(6)
 
 
 class TileContent():
-    T, W, H, L, R, S = range(6)
+    Empty, Resource, House, Player, Wall, Lava, Shop = range(7)
 
 
 class Point(object):
