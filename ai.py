@@ -123,7 +123,7 @@ def bot():
     #     return create_attack_action(target)
     # else:
     #     print("not fighting")
-    dest = get_next_move(player.Position, Point(0, 0), deserialized_map)
+    dest = get_next_move(player.Position, nearestResource(player,deserialized_map), deserialized_map)
 
     # dest = get_next_move(player.Position, player.HouseLocation, deserialized_map)
     print("dest: " + str(dest))
