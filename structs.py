@@ -1,4 +1,5 @@
 import math
+import pypaths
 
 
 class ActionTypes():
@@ -15,6 +16,26 @@ class TileType():
 
 class TileContent():
     Empty, Resource, House, Player, Wall, Lava, Shop = range(7)
+
+def nearestResource(player, deserialize_map):
+    notFound=False
+    range = 3
+    while(notFound):
+        firstColCase = player.Position.X-((range - 1)/2)
+        lastColCase = player.Position.X-((range - 1)/2)
+        firstRowCase = player.Position.Y-((range - 1) / 2)
+        lastRowCase = player.Position.Y-((range - 1) / 2)
+        if firstCase < 0 :
+            firstCase = 0
+        if lastColCase >= len(player.Position.X):
+            lastColCase = len(player.Position.X)-1
+
+
+        for i in range(firstColCase, lastColCase):
+            for j in range(firstRowCase, lastRowCase):
+                return 0
+
+
 
 
 class Point(object):
