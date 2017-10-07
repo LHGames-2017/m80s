@@ -60,6 +60,42 @@ def deserialize_map(serialized_map):
     return deserialized_map
 
 
+def nearestResource(player, map):
+    valid = True
+    range = 3
+    while(valid):
+        firstColCase = player.Position.X-((range - 1)/2)
+        lastColCase = player.Position.X-((range - 1)/2)
+
+        firstRowCase = player.Position.Y-((range - 1) / 2)
+        lastRowCase = player.Position.Y-((range - 1) / 2)
+
+
+        if firstColCase < 0 :
+            firstCase = 0
+
+        if lastColCase >= len(player.Position.X):
+            lastColCase = len(player.Position.X)-1
+
+
+        if firstRowCase < 0 :
+            firstRowCase = 0
+        if lastRowCase >= len(player.Position.Y):
+            lastRowCase = len(player.Position.Y)-1
+
+
+        for i in range(firstColCase, lastColCase):
+            for j in range(firstRowCase, lastRowCase):
+                if map.Position.Tile.Content[i][j] == TileContent.Resource:
+                    return map.Position
+
+        range += 2
+
+        if ((firstRowCase == 0) and (firstColCase == 0) and (lastColCase == len(player.Position.X)-1) and (lastRowCase == (len(player.Position.Y)-1))):
+            valid = False
+
+    return player.Position
+
 def bot():
     """
     Main de votre bot.
