@@ -123,6 +123,13 @@ def bot():
     #     return create_attack_action(target)
     # else:
     #     print("not fighting")
+    if player.CarriedRessources == player.CarryingCapacity:
+        dest = get_next_move(player.Position, player.HouseLocation, deserialized_map)
+        return create_move_action(dest)
+    delta_x = resource.X - player.Position.X
+    delta_y = resource.Y - player.Position.Y
+    if (abs(delta_x) == 1 and delta_y == 0) or (abs(delta_y) == 1 and delta_x == 0):
+        return collect_ressource(resource)
     dest = get_next_move(player.Position, nearestResource(player,deserialized_map), deserialized_map)
 
     # dest = get_next_move(player.Position, player.HouseLocation, deserialized_map)
@@ -241,6 +248,11 @@ def distance(p1, p2):
     delta_x = p1.X - p2.X
     delta_y = p1.Y - p2.Y
     return delta_x + delta_y
+
+
+def collect_ressource(dest):
+    return create_collect_action(dest)
+
 
 @app.route("/", methods=["POST"])
 def reponse():
