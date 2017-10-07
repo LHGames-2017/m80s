@@ -130,9 +130,10 @@ def bot():
     delta_y = resource.Y - player.Position.Y
     if (abs(delta_x) == 1 and delta_y == 0) or (abs(delta_y) == 1 and delta_x == 0):
         return collect_ressource(resource)
-    dest = get_next_move(player.Position, nearestResource(player,deserialized_map), deserialized_map)
+    dest = get_next_move(player.Position, resource, deserialized_map)
 
     # dest = get_next_move(player.Position, player.HouseLocation, deserialized_map)
+    print(nearestResource(player, deserialized_map))
     print("dest: " + str(dest))
     return create_move_action(dest)
 
@@ -169,8 +170,8 @@ def get_next_move(position, target, map):
     print("deltaX: " + str(delta_x) + " deltaY: " + str(delta_y))
     if delta_x > 0:
         # right_safe = map[10][9].Content == TileContent.Empty
-        down_safe = map[9][8].Content == TileContent.Empty
-        up_safe = map[9][10].Content == TileContent.Empty
+        down_safe = map[9][10].Content == TileContent.Empty
+        up_safe = map[9][8].Content == TileContent.Empty
         left_safe = map[8][9].Content == TileContent.Empty
         if delta_y > 0:
             if left_safe:
@@ -200,8 +201,8 @@ def get_next_move(position, target, map):
                 y = position.Y
     elif delta_x < 0:
         right_safe = map[10][9].Content == TileContent.Empty
-        down_safe = map[9][8].Content == TileContent.Empty
-        up_safe = map[9][10].Content == TileContent.Empty
+        down_safe = map[9][10].Content == TileContent.Empty
+        up_safe = map[9][8].Content == TileContent.Empty
         # left_safe = map[8][9].Content == TileContent.Empty
         if delta_y > 0:
             if right_safe:
@@ -231,8 +232,8 @@ def get_next_move(position, target, map):
                 y = position.Y
     else:
         x = position.X
-        down_safe = map[9][8].Content == TileContent.Empty
-        up_safe = map[9][10].Content == TileContent.Empty
+        down_safe = map[9][10].Content == TileContent.Empty
+        up_safe = map[9][8].Content == TileContent.Empty
         if delta_y < 0 and up_safe:
             y = position.Y + 1
         elif down_safe:
