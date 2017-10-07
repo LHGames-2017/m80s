@@ -14,7 +14,7 @@ class TileType():
 
 
 class TileContent():
-    Empty, Resource, House, Player, Wall, Lava, Shop = range(7)
+    T, W, H, L, R, S = range(6)
 
 
 class Point(object):
