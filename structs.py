@@ -1,5 +1,6 @@
 import math
 
+
 class ActionTypes():
     DefaultAction, MoveAction, AttackAction, CollectAction, UpgradeAction, StealAction, PurchaseAction = range(7)
 
@@ -77,8 +78,9 @@ class PlayerInfo(object):
         self.MaxHealth = maxHealth
         self.Position = position
 
+
 class ActionContent(object):
 
     def __init__(self, action_name, content):
         self.ActionName = action_name
-        self.Content = {}
+        self.Content = content

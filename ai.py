@@ -27,6 +27,9 @@ def create_heal_action():
 def create_purchase_action(item):
     return create_action("PurchaseAction", item)
 
+def create_upgrade_action(item):
+    return create_action("UpgradeAction", item)
+
 def deserialize_map(serialized_map):
     """
     Fonction utilitaire pour comprendre la map
@@ -94,4 +97,5 @@ def reponse():
     return bot()
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=3000)
+    app.run(host="0.0.0.0", port=8080)
+
